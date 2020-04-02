@@ -1,0 +1,26 @@
+img{
+    max-height: 200px;
+    min-width: 200px;
+    min-height: 200px;
+    max-width: 200px;
+    border-radius: 10px;
+  
+}
+
+
+footer li{
+    margin: 50px 10px 0px ;
+    display:inline-block;
+    color: brown;
+  font-size: 20px;
+  border: solid 2px;
+padding: 5px;
+  border-style: outset;
+  
+}
+
+
+.flex {
+display: flex;
+flex-wrap: wrap;
+}
