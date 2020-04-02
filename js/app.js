@@ -1,27 +1,36 @@
 'use strict';
-function Animal(animal) {
-  this.image_url = animal.image_url;
-  this.title = animal.title;
-  this.description = animal.description;
-  this.keyword = animal.keyword;
-  this.horns = animal.horns;
-}
-const array = [];
 
-Animal.prototype.render = function (container) {
-  let $container = $(container);
-  let $template = $container.find('.photo-template');
-  let $animal = $template.clone();
-  $animal.removeClass('photo-template');
-  $animal.find('.animal-name').text(this.name);
-  $animal.find('img.animal-image').attr('src', this.image_url);
-  $animal.find('.animal-description').text(this.description);
-  $animal.find('.animal-horns').text(this.horns);
-  $animal.find('option').text(this.title);
-  $container.append($animal);
-  array.push(this.keyword);
+//courtesy of chase, yvette, keith and in class efforts
+
+const filter = [];
+
+function Image(image) {
+  this.image_url = image.image_url;
+  this.title = image.title;
+  this.description = image.description;
+  this.keyword = image.keyword;
+  this.horns = image.horns;
+  filter.push(this);
+
+}
+
+Image.prototype.render = function () {
+  let container = $(`<div></div>`).clone();
+  container.append(`<h2>${this.title}</h2><p>${this.description}</p><img src="${this.image_url}"/><p>${this.horns}</p>`);
+  return container;
 };
 
+const keywords = [];
+function makeMyMenu(image) {
+  let $menu = $('.dropdown');
+  let $createOptions = $('<option>');
+  $createOptions.text(image.keyword);
+  $createOptions.val(image.keyword);
+  if (!keywords.includes(image.keyword)) {
+    keywords.push(image.keyword);
+    $menu.append($createOptions);
+  }
+}
 
 
 const ajaxSettings = {
@@ -29,22 +38,48 @@ const ajaxSettings = {
   dataType: 'json'
 };
 
+let images = null;
 
+$.ajax('data/page-1.json', ajaxSettings).then(function (data) {
+  images = data;
+  renderImages('default');
+  images.forEach(image => makeMyMenu(image));
+});
 
-console.log('aJax', ajaxSettings);
-$.ajax('data/page-1.json', ajaxSettings)
-  .then(function (data) {
-    data.forEach(animal => {
-      let actualAnimal = new Animal(animal);
-      actualAnimal.render('main');
-
-    });
-    console.log(data);
-    for (let i = 0; i < array.length; i++) {
-      $('#selected').append(
-        $('<option>').text(array[i]).val(i));
+function renderImages(filter) {
+  $('main').empty();
+  images.forEach((image) => {
+    let displayImage = new Image(image);
+    if (displayImage.keyword === filter) {
+      $('main').append(displayImage.render());
+    } else if (filter === 'default') {
+      $('main').append(displayImage.render());
     }
   });
+}
+
+
+$('.dropdown').on('change', function() {
+  let $this = $(this),
+    filterValue = $this.val();
+  renderImages(filterValue);
+});
 
 
 
+
+$('#pageOne').on('click', function() {
+  $.ajax('data/page-1.json', ajaxSettings).then(function (data) {
+    images = data;
+    renderImages('default');
+    images.forEach(image => makeMyMenu(image)); });
+
+});
+
+$('#pageTwo').on('click', function() {
+  $.ajax('data/page-2.json', ajaxSettings).then(function (data) {
+    images = data;
+    renderImages('default');
+    images.forEach(image => makeMyMenu(image)); });
+
+});
