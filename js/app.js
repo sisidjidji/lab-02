@@ -1,33 +1,30 @@
 'use strict';
 
-//courtesy of chase, yvette, keith and in class efforts
 
-const filter = [];
+const templateId = '#jackalope-template';
 
-function Image(image) {
-  this.image_url = image.image_url;
-  this.title = image.title;
-  this.description = image.description;
-  this.keyword = image.keyword;
-  this.horns = image.horns;
-  filter.push(this);
-
+function Animal(data) {
+  for (let key in data) {
+    console.log(key);
+    this[key] = data[key];
+  }
 }
 
-Image.prototype.render = function () {
-  let container = $(`<div></div>`).clone();
-  container.append(`<h2>${this.title}</h2><p>${this.description}</p><img src="${this.image_url}"/><p>${this.horns}</p>`);
-  return container;
+
+Animal.prototype.render = function () {
+  let templateHtml = $(templateId).html();
+  let html = Mustache.render(templateHtml, this);
+  return html;
 };
 
 const keywords = [];
-function makeMyMenu(image) {
+function makeMyMenu(animal) {
   let $menu = $('.dropdown');
   let $createOptions = $('<option>');
-  $createOptions.text(image.keyword);
-  $createOptions.val(image.keyword);
-  if (!keywords.includes(image.keyword)) {
-    keywords.push(image.keyword);
+  $createOptions.text(animal.keyword);
+  $createOptions.val(animal.keyword);
+  if (!keywords.includes(animal.keyword)) {
+    keywords.push(animal.keyword);
     $menu.append($createOptions);
   }
 }
@@ -43,17 +40,17 @@ let images = null;
 $.ajax('data/page-1.json', ajaxSettings).then(function (data) {
   images = data;
   renderImages('default');
-  images.forEach(image => makeMyMenu(image));
+  images.forEach(animal => makeMyMenu(animal));
 });
 
 function renderImages(filter) {
-  $('main').empty();
-  images.forEach((image) => {
-    let displayImage = new Image(image);
+  $('#main-section').empty();
+  images.forEach((animal) => {
+    let displayImage = new Animal(animal);
     if (displayImage.keyword === filter) {
-      $('main').append(displayImage.render());
+      $('#main-section').append(displayImage.render());
     } else if (filter === 'default') {
-      $('main').append(displayImage.render());
+      $('#main-section').append(displayImage.render());
     }
   });
 }
@@ -72,7 +69,7 @@ $('#pageOne').on('click', function() {
   $.ajax('data/page-1.json', ajaxSettings).then(function (data) {
     images = data;
     renderImages('default');
-    images.forEach(image => makeMyMenu(image)); });
+    images.forEach(animal => makeMyMenu(animal)); });
 
 });
 
@@ -80,6 +77,29 @@ $('#pageTwo').on('click', function() {
   $.ajax('data/page-2.json', ajaxSettings).then(function (data) {
     images = data;
     renderImages('default');
-    images.forEach(image => makeMyMenu(image)); });
+    images.forEach(animal => makeMyMenu(animal)); });
 
 });
+
+
+$('.sort').on('click', function() {
+
+
+});
+
+
+function sortByHorn(x,y){
+  let horn1=x.horn;
+  let horn2=y.horn;
+  if(horn1>horn2){
+    return 1;
+  }
+  else if(horn1<horn2){
+    return -1;
+  }
+  else {
+    if(horn1===0)
+      return 0;
+  }
+}
+

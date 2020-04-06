@@ -11,13 +11,14 @@
     <link rel="stylesheet" type="text/css" href="css/layout.css" />
 </head>
 
+
 <script id="jackalope-template" type="text/x-tmpl-mustache">
-    <div class="flex">       
-        <h2>{{title}}</h2>        
-        <p>{{description}}</p>        
-        <img id="img-page" src="{{image_url}}"/>       
-        <p>{{horns}}</p>             
-    </div>    
+    <div>
+        <h2>{{title}}</h2>
+        <img src={{image_url}} alt="{{title}}" class="image">
+        <p>{{description}}</p>
+      </div>
+
 </script>
 
 <body>
@@ -27,15 +28,16 @@
 
         <select class="dropdown">
             <option class="options">Filter by Keyword</option>
-
         </select>
+        <button class="sort"> sort by number of horn</button>
     </header>
 
     <main>
+        <section id ="main-section"></section>
     </main>
 
     <footer>
-        &copy; 2020 Delta V Code School
+    
         <ul>
             <li id="pageOne">
                 1
@@ -44,9 +46,12 @@
                 2
             </li>
         </ul>
+
+        &copy; 2020 Delta V Code School
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
     <script src="js/app.js"></script>
 
     <section id="photo-template">

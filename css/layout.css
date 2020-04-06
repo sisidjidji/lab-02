@@ -5,8 +5,12 @@ img{
     max-width: 200px;
     border-radius: 10px;
   
+  
 }
 
+#img-page{
+float: left;
+}
 
 footer li{
     margin: 50px 10px 0px ;
@@ -24,3 +28,4 @@ padding: 5px;
 display: flex;
 flex-wrap: wrap;
 }
+
